@@ -63,34 +63,46 @@ function load(){
  s.onerror=()=>{status.textContent="Could not load the live tally. Refresh and try again.";status.className="error"};document.body.appendChild(s)
 }
 function updateButton(){
- if(step<8){banner.textContent="ROUND 1";next.textContent=`Reveal Matchup ${step+1}`}
- else if(step<12){banner.textContent="ROUND 2";next.textContent=`Reveal Round 2 · Matchup ${step-7}`}
- else if(step<14){banner.textContent="SEMIFINALS";next.textContent=`Reveal Semifinal ${step-11}`}
- else if(step===14){banner.textContent="THE CHAMPIONSHIP";next.textContent="Reveal The Little Dumpling's Ultimate Name"}
+ const labels=[
+   ["ROUND 1","Reveal Round 1 · Left Side"],
+   ["ROUND 1","Reveal Round 1 · Right Side"],
+   ["ROUND 2","Reveal Round 2 · Left Side"],
+   ["ROUND 2","Reveal Round 2 · Right Side"],
+   ["SEMIFINALS","Reveal Left Finalist"],
+   ["SEMIFINALS","Reveal Right Finalist"],
+   ["THE CHAMPIONSHIP","Reveal The Little Dumpling's Ultimate Name"]
+ ];
+ if(step<labels.length){banner.textContent=labels[step][0];next.textContent=labels[step][1]}
  else{banner.textContent="🏆 WE HAVE A WINNER!";next.textContent="Champion Revealed";next.disabled=true}
 }
+function revealR1(i){
+ const r=data[i],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
+ decorate(`r1-${i}-a`,a,av,total,w===a);decorate(`r1-${i}-b`,b,bv,total,w===b);
+ const r2=Math.floor(i/2),slot=i%2===0?"a":"b";fill(`r2-${r2}-${slot}`,w);
+}
+function revealR2(i){
+ const r=data[8+i],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
+ decorate(`r2-${i}-a`,a,av,total,w===a);decorate(`r2-${i}-b`,b,bv,total,w===b);
+ const sf=Math.floor(i/2),slot=i%2===0?"a":"b";fill(`sf-${sf}-${slot}`,w);
+}
+function revealSF(i){
+ const r=data[12+i],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
+ decorate(`sf-${i}-a`,a,av,total,w===a);decorate(`sf-${i}-b`,b,bv,total,w===b);
+}
+function revealFinal(){
+ const r=data[14],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
+ champ.innerHTML=`🎉 ${w} 🏆`;mascot.textContent="🎉 🥟 🏆 🥟 🎉";
+ status.innerHTML=`<b>${a}</b>: ${av} votes · ${total?((av/total)*100).toFixed(1):"0.0"}% &nbsp; • &nbsp; <b>${b}</b>: ${bv} votes · ${total?((bv/total)*100).toFixed(1):"0.0"}%`;
+}
 function reveal(){
- if(step>=15)return;
- const r=data[step],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
-
- if(step<8){
-   decorate(`r1-${step}-a`,a,av,total,w===a);decorate(`r1-${step}-b`,b,bv,total,w===b);
-   const r2=Math.floor(step/2),slot=step%2===0?"a":"b";fill(`r2-${r2}-${slot}`,w);
-   status.textContent=`${w} advances to Round 2.`;
- } else if(step<12){
-   const i=step-8,r2=i;
-   decorate(`r2-${r2}-a`,a,av,total,w===a);decorate(`r2-${r2}-b`,b,bv,total,w===b);
-   const sf=Math.floor(i/2),slot=i%2===0?"a":"b";fill(`sf-${sf}-${slot}`,w);
-   status.textContent=`${w} advances to the semifinals.`;
- } else if(step<14){
-   const sf=step-12;
-   decorate(`sf-${sf}-a`,a,av,total,w===a);decorate(`sf-${sf}-b`,b,bv,total,w===b);
-   status.textContent=`${w} advances to the championship!`;
- } else {
-   // Final results are deliberately held until the dramatic last click.
-   champ.innerHTML=`🎉 ${w} 🏆`;mascot.textContent="🎉 🥟 🏆 🥟 🎉";
-   status.innerHTML=`<b>${a}</b>: ${av} votes · ${total?((av/total)*100).toFixed(1):"0.0"}% &nbsp; • &nbsp; <b>${b}</b>: ${bv} votes · ${total?((bv/total)*100).toFixed(1):"0.0"}%`;
- }
+ if(step>=7)return;
+ if(step===0){[0,1,2,3].forEach(revealR1);status.textContent="Round 1 · Left side revealed."}
+ else if(step===1){[4,5,6,7].forEach(revealR1);status.textContent="Round 1 complete · Switch to the leaderboard for the survival update!"}
+ else if(step===2){[0,1].forEach(revealR2);status.textContent="Round 2 · Left side revealed."}
+ else if(step===3){[2,3].forEach(revealR2);status.textContent="Round 2 complete · Time for another leaderboard update!"}
+ else if(step===4){revealSF(0);status.textContent=`${data[12].winner} is the left-side finalist!`}
+ else if(step===5){revealSF(1);status.textContent="Semifinals complete · Check who's still alive before the final reveal!"}
+ else if(step===6){revealFinal()}
  step++;updateButton();
 }
 next.onclick=reveal;reset.onclick=()=>location.reload();build();load();
