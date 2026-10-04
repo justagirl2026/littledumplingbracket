@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -71,19 +72,27 @@ function setPill(id,n){
 }
 function pct(v,t){return t?((v/t)*100).toFixed(1):"0.0"}
 
-async function load(){
+function receiveTally(results){
  try{
-  const response=await fetch(ENDPOINT,{cache:"no-store"});
-  if(!response.ok) throw new Error("Could not load results");
-  data=await response.json();
-  if(!Array.isArray(data)||data.length<15) throw new Error("Incomplete tally data");
+  if(!Array.isArray(results)||results.length<15) throw new Error("Incomplete tally data");
+  data=results;
   status.textContent="Official tally loaded · Ready to reveal Round 1";
   next.disabled=false;
  }catch(err){
-  status.textContent="Could not load the live tally. Refresh the page and try again.";
+  status.textContent="The tally loaded, but the data was incomplete.";
   status.className="error";
   console.error(err);
  }
+}
+
+function load(){
+ const script=document.createElement("script");
+ script.src=ENDPOINT+"?callback=receiveTally&_="+Date.now();
+ script.onerror=function(){
+  status.textContent="Could not load the live tally. Refresh the page and try again.";
+  status.className="error";
+ };
+ document.body.appendChild(script);
 }
 
 function reveal(){
