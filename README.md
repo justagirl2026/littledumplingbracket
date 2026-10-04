@@ -5,158 +5,162 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Little Dumpling's Ultimate Name Bracket</title>
 <style>
+:root{--ink:#302821;--paper:#fbf5ec;--card:#fffdf9;--line:#d9cabb;--accent:#b97862;--accent2:#ead8ce}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f8f1e7;color:#2b2521}
-header{text-align:center;padding:28px 16px 18px}
-h1{margin:0;font-size:clamp(26px,4vw,44px);letter-spacing:.03em}
-.subtitle{margin:8px 0 0;font-size:15px}
-.instructions{max-width:900px;margin:0 auto 18px;text-align:center;font-size:14px}
-.bracket-wrap{overflow-x:auto;padding:10px 18px 28px}
-.bracket{min-width:1120px;max-width:1450px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:26px}
-.round{display:flex;flex-direction:column}
-.round h2{text-align:center;font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px}
-.games{flex:1;display:flex;flex-direction:column;justify-content:space-around;gap:18px}
-.game{display:flex;flex-direction:column;gap:4px}
-.slot{position:relative;display:flex;align-items:center;justify-content:space-between;background:white;border:2px solid #d8cdc1;border-radius:8px;padding:10px 12px;min-height:42px;cursor:pointer;transition:.15s}
-.slot:hover{border-color:#8d6b58;transform:translateY(-1px)}
-.slot.selected{background:#2b2521;color:white;border-color:#2b2521}
-.slot.disabled{opacity:.45;cursor:not-allowed}
-.seed{font-size:11px;opacity:.65;margin-right:8px}
-.name{font-weight:700}
-.pick{font-size:11px;opacity:.65}
-.final .slot{min-height:48px}
-.champion{border:3px solid #b48a45!important;background:#fffaf0!important;color:#2b2521!important}
-.champion .pick{color:#b48a45}
-.form{max-width:520px;margin:0 auto 40px;background:white;border:1px solid #ded3c7;border-radius:12px;padding:22px}
-.form h2{margin-top:0}
-label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
-input{width:100%;padding:12px;border:1px solid #cfc2b5;border-radius:7px;font-size:16px}
-button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:8px;background:#2b2521;color:white;font-size:16px;font-weight:700;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-.status{text-align:center;margin-top:12px;font-size:13px}
-.notice{font-size:12px;line-height:1.5;margin-top:10px;color:#665c55}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+header{text-align:center;padding:34px 18px 22px}
+.kicker{font-family:Arial,sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+h1{margin:0;font-size:clamp(30px,5vw,52px);line-height:1.05}
+.subtitle{font-family:Arial,sans-serif;margin:12px auto 0;max-width:650px;font-size:14px}
+.bracket-wrap{overflow-x:auto;padding:10px 18px 32px}
+.bracket{min-width:1180px;max-width:1450px;margin:auto;display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;gap:30px}
+.round{min-width:0}
+.round-title{text-align:center;font-family:Arial,sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin:0 0 15px}
+.games{height:720px;display:flex;flex-direction:column;justify-content:space-around}
+.game{display:flex;flex-direction:column;gap:5px}
+.slot{min-height:43px;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);display:flex;align-items:center;gap:8px;cursor:pointer;transition:transform .12s,border-color .12s,background .12s,box-shadow .12s;font-family:Arial,sans-serif}
+.slot:hover:not(.empty){transform:translateY(-1px);border-color:var(--accent)}
+.slot.selected{background:var(--accent2);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.slot.empty{opacity:.55;cursor:default}
+.seed{font-size:10px;color:#8b7d71;min-width:18px}
+.name{font-size:14px;font-weight:700;flex:1}
+.check{font-size:13px;color:var(--accent);font-weight:700}
+.final .slot{min-height:50px}
+.final .games{height:720px}
+.champion{border-color:#a66b48!important;background:#f4e4d7!important}
+.note{max-width:650px;margin:0 auto 18px;text-align:center;font-family:Arial,sans-serif;font-size:12px;color:#6e6259}
+.form{max-width:520px;margin:0 auto 44px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.form h2{margin:0 0 8px;font-size:25px}
+.form p{font-family:Arial,sans-serif;font-size:13px;line-height:1.5;margin:0 0 18px}
+label{display:block;font-family:Arial,sans-serif;font-size:12px;font-weight:700;margin:12px 0 6px}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:7px;font-size:16px}
+button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:8px;background:var(--ink);color:white;font-family:Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{font-family:Arial,sans-serif;text-align:center;font-size:13px;margin-top:12px}
+@media(max-width:700px){header{padding-top:24px}.bracket-wrap{padding-left:10px;padding-right:10px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>THE LITTLE DUMPLING'S<br>ULTIMATE NAME BRACKET</h1>
-  <p class="subtitle">16 names. 1 champion. Make your picks.</p>
+  <div class="kicker">Welcome to</div>
+  <h1>The Little Dumpling's<br>Ultimate Name Bracket</h1>
+  <p class="subtitle">16 names. One champion. Pick the name you think will make it all the way.</p>
 </header>
 
-<div class="instructions">
-  Click one name in each matchup. Your selection advances automatically through the bracket.
-  Complete all four rounds, then submit your bracket.
-</div>
+<div class="note">Click one name in every matchup. Your pick will advance into the next round automatically.</div>
 
 <div class="bracket-wrap">
-<div class="bracket">
-  <section class="round"><h2>Round 1</h2><div class="games" id="r1"></div></section>
-  <section class="round"><h2>Round 2</h2><div class="games" id="r2"></div></section>
-  <section class="round"><h2>Semifinals</h2><div class="games" id="r3"></div></section>
-  <section class="round final"><h2>Final</h2><div class="games" id="r4"></div></section>
-</div>
+  <main class="bracket" aria-label="Baby name tournament bracket">
+    <section class="round"><div class="round-title">Round 1</div><div class="games" id="r1"></div></section>
+    <section class="round"><div class="round-title">Round 2</div><div class="games" id="r2"></div></section>
+    <section class="round"><div class="round-title">Semifinals</div><div class="games" id="r3"></div></section>
+    <section class="round final"><div class="round-title">Final</div><div class="games" id="r4"></div></section>
+  </main>
 </div>
 
-<div class="form">
-  <h2>Submit your bracket</h2>
+<section class="form">
+  <h2>Ready to lock it in?</h2>
+  <p>Complete every matchup above, then enter your name. Submission is disabled until your bracket is complete.</p>
   <label for="player">Your name</label>
-  <input id="player" placeholder="Enter your name">
-  <button id="submit" disabled>Submit my bracket</button>
-  <div class="status" id="status"></div>
-  <div class="notice">One submission per person. Your name and completed picks are recorded when you submit.</div>
-</div>
+  <input id="player" autocomplete="name" placeholder="Enter your name">
+  <button id="submit" disabled>Submit My Bracket</button>
+  <div class="status" id="status" role="status"></div>
+</section>
 
 <script>
-const rounds = [
-  [
-    [{seed:1,name:"Avery"},{seed:16,name:"Stump"}],
-    [{seed:8,name:"Augusta"},{seed:9,name:"Bailey"}],
-    [{seed:5,name:"Hieu"},{seed:12,name:"Callahan"}],
-    [{seed:4,name:"Liam"},{seed:13,name:"Arlo"}],
-    [{seed:6,name:"Logan"},{seed:11,name:"Caleb"}],
-    [{seed:3,name:"Rhys"},{seed:14,name:"Jared Jr."}],
-    [{seed:7,name:"Aiden"},{seed:10,name:"Lucas"}],
-    [{seed:2,name:"Val"},{seed:15,name:"Hannala"}]
-  ],
-  Array(4).fill(null).map(()=>[null,null]),
-  Array(2).fill(null).map(()=>[null,null]),
-  Array(1).fill(null).map(()=>[null,null])
+const initial=[
+  [{seed:1,name:"Avery"},{seed:16,name:"Stump"}],
+  [{seed:8,name:"Augusta"},{seed:9,name:"Bailey"}],
+  [{seed:5,name:"Hieu"},{seed:12,name:"Callahan"}],
+  [{seed:4,name:"Liam"},{seed:13,name:"Arlo"}],
+  [{seed:6,name:"Logan"},{seed:11,name:"Caleb"}],
+  [{seed:3,name:"Rhys"},{seed:14,name:"Jared Jr."}],
+  [{seed:7,name:"Aiden"},{seed:10,name:"Lucas"}],
+  [{seed:2,name:"Val"},{seed:15,name:"Hannala"}]
 ];
 
-const picks = [[],[],[],[]];
+let rounds=[
+  initial.map(g=>g.map(x=>({...x}))),
+  Array.from({length:4},()=>[null,null]),
+  Array.from({length:2},()=>[null,null]),
+  Array.from({length:1},()=>[null,null])
+];
+let picks=Array.from({length:4},()=>[]);
 
-function renderRound(r){
-  const el=document.getElementById("r"+(r+1));
-  el.innerHTML="";
-  rounds[r].forEach((game,gi)=>{
-    const div=document.createElement("div"); div.className="game";
-    game.forEach((slot,si)=>{
-      const b=document.createElement("div"); b.className="slot";
-      if(!slot){ b.classList.add("disabled"); b.innerHTML='<span class="name">Waiting for your pick…</span>'; }
-      else{
-        const selected=picks[r][gi]===si;
-        if(selected)b.classList.add("selected");
-        if(r===3 && selected)b.classList.add("champion");
-        b.innerHTML=`<span><span class="seed">${slot.seed??""}</span><span class="name">${slot.name}</span></span><span class="pick">${selected?"✓":""}</span>`;
-        b.onclick=()=>choose(r,gi,si);
-      }
-      div.appendChild(b);
+function selectedName(r,g){
+  const i=picks[r][g];
+  return i===0||i===1 ? rounds[r][g][i] : null;
+}
+function resetFrom(r){
+  for(let x=r;x<4;x++){
+    picks[x]=[];
+    if(x>0) rounds[x]=Array.from({length:4/Math.pow(2,x)},()=>[null,null]);
+  }
+  // Rebuild later-round slots from the picks that still exist.
+  for(let x=r;x<4;x++){
+    if(x===0) continue;
+    const source=rounds[x-1];
+    const out=rounds[x];
+    out.forEach((g,gi)=>{
+      const leftPick=picks[x-1][gi*2];
+      const rightPick=picks[x-1][gi*2+1];
+      g[0]=leftPick===0||leftPick===1 ? {...source[gi*2][leftPick]} : null;
+      g[1]=rightPick===0||rightPick===1 ? {...source[gi*2+1][rightPick]} : null;
     });
-    el.appendChild(div);
+  }
+}
+function choose(r,g,slot){
+  if(!rounds[r][g][slot]) return;
+  picks[r][g]=slot;
+  // Clear everything after this round and rebuild from the selections
+  for(let x=r+1;x<4;x++){picks[x]=[];}
+  for(let x=r+1;x<4;x++){
+    const source=rounds[x-1];
+    const out=rounds[x];
+    out.forEach((match,gi)=>{
+      const a=picks[x-1][gi*2], b=picks[x-1][gi*2+1];
+      match[0]=(a===0||a===1)?{...source[gi*2][a]}:null;
+      match[1]=(b===0||b===1)?{...source[gi*2+1][b]}:null;
+    });
+  }
+  render();
+}
+function renderRound(r){
+  const el=document.getElementById("r"+(r+1)); el.innerHTML="";
+  rounds[r].forEach((match,g)=>{
+    const game=document.createElement("div");game.className="game";
+    match.forEach((item,s)=>{
+      const slot=document.createElement("div");
+      const chosen=picks[r][g]===s;
+      slot.className="slot"+(item?"":" empty")+(chosen?" selected":"")+(r===3&&chosen?" champion":"");
+      if(item){
+        slot.innerHTML='<span class="seed">'+(item.seed??"")+'</span><span class="name">'+item.name+'</span><span class="check">'+(chosen?"✓":"")+'</span>';
+        slot.onclick=()=>choose(r,g,s);
+        slot.setAttribute("role","button");
+        slot.setAttribute("aria-label","Choose "+item.name);
+      }else{
+        slot.innerHTML='<span class="name">Waiting for your picks</span>';
+      }
+      game.appendChild(slot);
+    });
+    el.appendChild(game);
   });
 }
-
-function choose(r,gi,si){
-  const slot=rounds[r][gi][si]; if(!slot)return;
-  picks[r][gi]=si;
-  // Advance selected name into next round.
-  if(r<3){
-    const nextGame=Math.floor(gi/2), nextSlot=gi%2;
-    rounds[r+1][nextGame][nextSlot]={...slot};
-    // Clear dependent later picks if necessary.
-    for(let rr=r+1;rr<4;rr++){
-      picks[rr]=picks[rr].map((v,i)=> (rr===r+1 && i===nextGame)?undefined:undefined);
-    }
-    // Rebuild all subsequent rounds from current picks.
-    rebuildFrom(r+1);
-  }
-  renderAll();
+function isComplete(){
+  return rounds.every((arr,r)=>picks[r].length===arr.length && picks[r].every(v=>v===0||v===1));
 }
-
-function rebuildFrom(start){
-  for(let r=start;r<4;r++){
-    if(r>start){
-      rounds[r].forEach(g=>g.forEach((_,si)=>rounds[r][si]=rounds[r][si]));
-    }
-    // If this round has enough source winners, populate slots from prior round.
-    if(r>0){
-      rounds[r].forEach((g,gi)=>{
-        const a=picks[r-1][gi*2];
-        const b=picks[r-1][gi*2+1];
-        rounds[r][gi][0]=a!==undefined ? rounds[r-1][gi*2][a] : null;
-        rounds[r][gi][1]=b!==undefined ? rounds[r-1][gi*2+1][b] : null;
-      });
-    }
-    // Invalidate this and later picks if the selected slot no longer exists.
-    if(r>=start) picks[r]=[];
-  }
-}
-function renderAll(){for(let r=0;r<4;r++)renderRound(r); updateSubmit();}
-function updateSubmit(){
-  const complete=picks.every((arr,r)=>arr.length===rounds[r].length && arr.every(v=>v!==undefined));
-  document.getElementById("submit").disabled=!complete;
+function render(){
+  for(let r=0;r<4;r++)renderRound(r);
+  document.getElementById("submit").disabled=!isComplete();
 }
 document.getElementById("submit").onclick=()=>{
   const name=document.getElementById("player").value.trim();
-  if(!name){alert("Please enter your name.");return;}
-  const bracket=picks.map((arr,r)=>arr.map((si,gi)=>rounds[r][gi][si].name));
-  const payload={name,submittedAt:new Date().toISOString(),round1:bracket[0],round2:bracket[1],semifinals:bracket[2],final:bracket[3]};
-  // Replace this with your Google Apps Script endpoint when ready.
-  console.log("SUBMISSION",payload);
-  document.getElementById("status").textContent="Bracket ready! (The Google Sheet connection will be added next.)";
-  document.getElementById("submit").disabled=true;
+  if(!name){document.getElementById("status").textContent="Please enter your name.";return;}
+  const chosen=rounds.map((arr,r)=>arr.map((g,i)=>g[picks[r][i]].name));
+  console.log({name,round1:chosen[0],round2:chosen[1],semifinals:chosen[2],final:chosen[3]});
+  document.getElementById("status").textContent="Your bracket is complete and ready to submit. We'll connect this button to your Google Sheet next.";
 };
-renderAll();
+render();
 </script>
 </body>
 </html>
