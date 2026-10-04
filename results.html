@@ -4,121 +4,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Little Dumpling's Name Bracket — Live Results</title>
+<title>The Little Dumpling's Name Bracket — Results Reveal</title>
 <style>
-:root{--paper:#fbf8f2;--ink:#302821;--brown:#754330;--line:#665950;--soft:#ead8ce;--win:#f0ddd0;--muted:#9d8f84}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
-header{text-align:center;padding:28px 12px 8px;color:var(--brown)}
-header small{letter-spacing:.24em;font-weight:700}h1{font-size:clamp(34px,4vw,52px);margin:5px}
-.dumpling{font-size:32px;display:inline-block;animation:bob 2.2s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-4px) rotate(2deg)}}
-.subtitle{font-family:Arial,sans-serif;font-size:13px;color:#76685f}
-.stage{overflow-x:auto;padding:18px 24px 8px}
-.bracket{min-width:1240px;max-width:1420px;height:690px;margin:auto;display:grid;grid-template-columns:215px 185px 170px 225px 170px 185px 215px;gap:22px}
-.col{display:flex;flex-direction:column;justify-content:space-around}.r2{padding:65px 0}.sf{padding:165px 0}.center{justify-content:center}
+:root{--paper:#fbf8f2;--ink:#302821;--brown:#7b432f;--line:#8b6a5b;--soft:#f0ddd0;--muted:#b8aaa0;--white:#fffaf4}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+header{text-align:center;padding:24px 12px 2px;color:var(--brown)}header small{letter-spacing:.25em;font-weight:700}h1{font-size:clamp(35px,4vw,52px);margin:5px}.dumpling{font-size:30px}.subtitle{font:13px Arial,sans-serif;color:#76685f}
+.stage{overflow-x:auto;padding:12px 22px}.bracket{min-width:1240px;max-width:1450px;height:690px;margin:auto;display:grid;grid-template-columns:220px 190px 175px 230px 175px 190px 220px;gap:22px}
+.col{display:flex;flex-direction:column;justify-content:space-around}.r2{padding:62px 0}.sf{padding:165px 0}.center{justify-content:center}
 .match{display:flex;flex-direction:column;gap:7px}
-.pill{border:1.5px solid var(--line);border-radius:28px;min-height:49px;padding:9px 11px;text-align:center;display:flex;align-items:center;justify-content:center;letter-spacing:.08em;font-size:14px;font-weight:700;background:#fff8;transition:.45s}
-.pill.pending{color:var(--muted);border-color:#aaa099}.pill.winner{background:var(--win);border-color:var(--brown);box-shadow:0 5px 16px #4f39251a}.pill.loser{opacity:.35}.seed{font-size:10px;color:#76685e;margin-right:5px}
-.champ{border:2px solid var(--brown);border-radius:32px;padding:30px 15px;text-align:center;background:#fffaf3;box-shadow:0 10px 28px #50372814}
+.pill{border:1.5px solid var(--line);border-radius:28px;min-height:55px;padding:8px 12px;text-align:center;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;background:#fff7;transition:.5s}
+.pill.pending{color:var(--muted);border-color:#c7bbb2;font-weight:400;letter-spacing:.12em}.pill.winner{background:var(--soft);border-color:var(--brown);box-shadow:0 5px 17px #4f39251b}.pill.loser{opacity:.38}.seed{font-size:10px;color:#78685e;margin-right:5px}
+.vote{display:block;font:10px Arial,sans-serif;font-weight:400;color:#6f6259;margin-top:4px;letter-spacing:0}.pill.loser .vote{text-decoration:none}
+.champ{border:2px solid var(--brown);border-radius:32px;padding:28px 14px;text-align:center;background:var(--white);box-shadow:0 10px 28px #50372814}
 .champ small{letter-spacing:.15em;color:var(--brown);font-weight:700}.champ-name{font-size:31px;font-weight:700;color:var(--brown);margin-top:12px;min-height:38px}
-.controls{text-align:center;max-width:680px;margin:5px auto 38px;padding:0 15px;font-family:Arial,sans-serif}
-.card{display:none;border:1px solid #d7c5b8;background:#fffaf4;border-radius:18px;padding:16px;margin-bottom:12px;line-height:1.7}.card.show{display:block}
-.card-title{font:700 21px Georgia,serif;color:var(--brown)}
-button{border:0;border-radius:30px;padding:13px 22px;margin:5px;background:var(--brown);color:#fff;font-weight:700;cursor:pointer}.secondary{background:#e5d8cf;color:var(--ink)}button:disabled{opacity:.4;cursor:not-allowed}
+.controls{text-align:center;max-width:680px;margin:0 auto 38px;padding:0 15px;font-family:Arial,sans-serif}
 #status{font-size:12px;color:#786b62;margin:8px 0}.error{color:#9a3c32!important}
-</style>
-</head>
+button{border:0;border-radius:30px;padding:14px 25px;margin:5px;background:var(--brown);color:#fff;font-weight:700;font-size:14px;cursor:pointer}.secondary{background:#e5d8cf;color:var(--ink)}button:disabled{opacity:.4;cursor:not-allowed}
+.round-banner{font:700 19px Georgia,serif;color:var(--brown);min-height:25px;margin-bottom:5px}
+</style></head>
 <body>
 <header><small>THE LITTLE DUMPLING'S</small><h1><span class="dumpling">🥟</span> NAME BRACKET <span class="dumpling">🥟</span></h1><div class="subtitle">The Official Results Reveal</div></header>
 <div class="stage"><div class="bracket">
 <div class="col" id="lr1"></div><div class="col r2" id="lr2"></div><div class="col sf" id="lsf"></div>
-<div class="col center"><div class="champ"><div style="font-size:30px" id="mascot">🥟</div><small>THE LITTLE DUMPLING'S<br>ULTIMATE NAME</small><div class="champ-name" id="champ">?????</div></div></div>
+<div class="col center"><div class="champ"><div id="mascot" style="font-size:28px">🥟</div><small>THE LITTLE DUMPLING'S<br>ULTIMATE NAME</small><div class="champ-name" id="champ">?????</div></div></div>
 <div class="col sf" id="rsf"></div><div class="col r2" id="rr2"></div><div class="col" id="rr1"></div>
 </div></div>
-<div class="controls">
-<div class="card" id="card"><div class="card-title" id="cardTitle"></div><div id="cardVotes"></div></div>
-<div id="status">Loading the official tally…</div>
-<button id="next" disabled>Reveal Next Matchup</button><button class="secondary" id="reset">Reset Reveal</button>
-</div>
+<div class="controls"><div class="round-banner" id="banner">ROUND 1</div><div id="status">Loading the official tally…</div><button id="next" disabled>Reveal Matchup 1</button><button class="secondary" id="reset">Reset Reveal</button></div>
 
 <script>
 const ENDPOINT="https://script.google.com/macros/s/AKfycbz8c_izp_i0l-Vl8c8oR6xK90Pfp7unfEed1WNfFfetaE3WUpaeEn4qrHN9gfEfdeBH/exec";
 const seeds={Avery:1,Val:2,Rhys:3,Liam:4,Hieu:5,Logan:6,Aiden:7,Augusta:8,Bailey:9,Lucas:10,Caleb:11,Callahan:12,Arlo:13,"Jared Jr.":14,Hannala:15,Stump:16};
-
-/* Visual arrangement preserves the symmetrical PDF feel, while the IDs map to
-   the ACTUAL voting bracket:
-   R1 0+1 -> R2 0; R1 2+3 -> R2 1; R1 4+5 -> R2 2; R1 6+7 -> R2 3.
-   R2 0+1 -> SF 0; R2 2+3 -> SF 1. */
-const leftIndexes=[0,1,2,3];
-const rightIndexes=[7,6,5,4];
-
+const base=[["Avery","Stump"],["Augusta","Bailey"],["Hieu","Callahan"],["Liam","Arlo"],["Logan","Caleb"],["Rhys","Jared Jr."],["Aiden","Lucas"],["Val","Hannala"]];
+const leftIndexes=[0,1,2,3],rightIndexes=[7,6,5,4];
 let data=[],step=0;
 
-function nameHTML(n){return `<span class="seed">${seeds[n]??""} -</span>${n}`}
-function pill(n,id,pending=false){return `<div class="pill ${pending?"pending":""}" id="${id}">${pending?"?????":nameHTML(n)}</div>`}
+function baseName(n){return `<span><span class="seed">${seeds[n]??""} -</span>${n}</span>`}
+function pending(id){return `<div class="pill pending" id="${id}">?????</div>`}
+function r1pill(n,id){return `<div class="pill" id="${id}">${baseName(n)}</div>`}
 function build(){
- const base=[
-  ["Avery","Stump"],["Augusta","Bailey"],["Hieu","Callahan"],["Liam","Arlo"],
-  ["Logan","Caleb"],["Rhys","Jared Jr."],["Aiden","Lucas"],["Val","Hannala"]
- ];
- lr1.innerHTML=leftIndexes.map(i=>`<div class="match">${pill(base[i][0],`r1-${i}-a`)}${pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
- rr1.innerHTML=rightIndexes.map(i=>`<div class="match">${pill(base[i][0],`r1-${i}-a`)}${pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
- lr2.innerHTML=pill("",`r2-0`,true)+pill("",`r2-1`,true);
- rr2.innerHTML=pill("",`r2-3`,true)+pill("",`r2-2`,true);
- lsf.innerHTML=pill("",`sf-0`,true); rsf.innerHTML=pill("",`sf-1`,true);
+ lr1.innerHTML=leftIndexes.map(i=>`<div class="match">${r1pill(base[i][0],`r1-${i}-a`)}${r1pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
+ rr1.innerHTML=rightIndexes.map(i=>`<div class="match">${r1pill(base[i][0],`r1-${i}-a`)}${r1pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
+ lr2.innerHTML=pending("r2-0-a")+pending("r2-0-b")+pending("r2-1-a")+pending("r2-1-b");
+ rr2.innerHTML=pending("r2-3-a")+pending("r2-3-b")+pending("r2-2-a")+pending("r2-2-b");
+ lsf.innerHTML=pending("sf-0-a")+pending("sf-0-b");
+ rsf.innerHTML=pending("sf-1-a")+pending("sf-1-b");
 }
-function setPill(id,n){
- const e=document.getElementById(id); e.className="pill winner"; e.innerHTML=nameHTML(n);
+function fill(id,n){const e=document.getElementById(id);e.className="pill";e.innerHTML=baseName(n)}
+function decorate(id,n,v,total,win){
+ const e=document.getElementById(id);e.classList.add(win?"winner":"loser");
+ e.innerHTML=`<span><span class="seed">${seeds[n]??""} -</span>${n}<span class="vote">${v} vote${v===1?"":"s"} · ${total?((v/total)*100).toFixed(1):"0.0"}%</span></span>`;
 }
-function pct(v,t){return t?((v/t)*100).toFixed(1):"0.0"}
-
 function receiveTally(results){
- try{
-  if(!Array.isArray(results)||results.length<15) throw new Error("Incomplete tally data");
-  data=results;
-  status.textContent="Official tally loaded · Ready to reveal Round 1";
-  next.disabled=false;
- }catch(err){
-  status.textContent="The tally loaded, but the data was incomplete.";
-  status.className="error";
-  console.error(err);
- }
+ if(!Array.isArray(results)||results.length<15){status.textContent="The tally data is incomplete.";status.className="error";return}
+ data=results;status.textContent="Official tally loaded · Results are hidden until you reveal them.";next.disabled=false;updateButton();
 }
-
 function load(){
- const script=document.createElement("script");
- script.src=ENDPOINT+"?callback=receiveTally&_="+Date.now();
- script.onerror=function(){
-  status.textContent="Could not load the live tally. Refresh the page and try again.";
-  status.className="error";
- };
- document.body.appendChild(script);
+ const s=document.createElement("script");s.src=ENDPOINT+"?callback=receiveTally&_="+Date.now();
+ s.onerror=()=>{status.textContent="Could not load the live tally. Refresh and try again.";status.className="error"};document.body.appendChild(s)
 }
-
+function updateButton(){
+ if(step<8){banner.textContent="ROUND 1";next.textContent=`Reveal Matchup ${step+1}`}
+ else if(step<12){banner.textContent="ROUND 2";next.textContent=`Reveal Round 2 · Matchup ${step-7}`}
+ else if(step<14){banner.textContent="SEMIFINALS";next.textContent=`Reveal Semifinal ${step-11}`}
+ else if(step===14){banner.textContent="THE CHAMPIONSHIP";next.textContent="Reveal The Little Dumpling's Ultimate Name"}
+ else{banner.textContent="🏆 WE HAVE A WINNER!";next.textContent="Champion Revealed";next.disabled=true}
+}
 function reveal(){
  if(step>=15)return;
- const r=data[step],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,t=av+bv;
- card.className="card show";
- cardTitle.textContent=`${r.round}: ${w} advances!`;
- cardVotes.innerHTML=`${a}: <b>${av} votes · ${pct(av,t)}%</b><br>${b}: <b>${bv} votes · ${pct(bv,t)}%</b>`;
+ const r=data[step],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
 
  if(step<8){
-   const winId=`r1-${step}-${w===a?"a":"b"}`,loseId=`r1-${step}-${w===a?"b":"a"}`;
-   document.getElementById(winId).classList.add("winner");
-   document.getElementById(loseId).classList.add("loser");
-   setPill(`r2-${Math.floor(step/2)}`,w);
+   decorate(`r1-${step}-a`,a,av,total,w===a);decorate(`r1-${step}-b`,b,bv,total,w===b);
+   const r2=Math.floor(step/2),slot=step%2===0?"a":"b";fill(`r2-${r2}-${slot}`,w);
+   status.textContent=`${w} advances to Round 2.`;
  } else if(step<12){
-   setPill(`sf-${Math.floor((step-8)/2)}`,w);
- } else if(step===14){
-   champ.textContent=w; mascot.textContent="🎉 🥟 🏆 🥟 🎉";
+   const i=step-8,r2=i;
+   decorate(`r2-${r2}-a`,a,av,total,w===a);decorate(`r2-${r2}-b`,b,bv,total,w===b);
+   const sf=Math.floor(i/2),slot=i%2===0?"a":"b";fill(`sf-${sf}-${slot}`,w);
+   status.textContent=`${w} advances to the semifinals.`;
+ } else if(step<14){
+   const sf=step-12;
+   decorate(`sf-${sf}-a`,a,av,total,w===a);decorate(`sf-${sf}-b`,b,bv,total,w===b);
+   status.textContent=`${w} advances to the championship!`;
+ } else {
+   // Final results are deliberately held until the dramatic last click.
+   champ.innerHTML=`🎉 ${w} 🏆`;mascot.textContent="🎉 🥟 🏆 🥟 🎉";
+   status.innerHTML=`<b>${a}</b>: ${av} votes · ${total?((av/total)*100).toFixed(1):"0.0"}% &nbsp; • &nbsp; <b>${b}</b>: ${bv} votes · ${total?((bv/total)*100).toFixed(1):"0.0"}%`;
  }
- step++;
- const phase=step<8?"Round 1":step<12?"Round 2":step<14?"Semifinals":step<15?"Championship":"Complete";
- status.textContent=step===15?"The Little Dumpling has a champion!":`${phase} · ${step} of 15 results revealed`;
- if(step===15){next.disabled=true;next.textContent="Champion Revealed 🏆"}
+ step++;updateButton();
 }
-next.onclick=reveal;
-reset.onclick=()=>location.reload();
-build();load();
+next.onclick=reveal;reset.onclick=()=>location.reload();build();load();
 </script>
 </body></html>
