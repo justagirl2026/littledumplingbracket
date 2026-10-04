@@ -44,10 +44,10 @@ function r1pill(n,id){return `<div class="pill" id="${id}">${baseName(n)}</div>`
 function build(){
  lr1.innerHTML=leftIndexes.map(i=>`<div class="match">${r1pill(base[i][0],`r1-${i}-a`)}${r1pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
  rr1.innerHTML=rightIndexes.map(i=>`<div class="match">${r1pill(base[i][0],`r1-${i}-a`)}${r1pill(base[i][1],`r1-${i}-b`)}</div>`).join("");
- lr2.innerHTML=pending("r2-0-a")+pending("r2-0-b")+pending("r2-1-a")+pending("r2-1-b");
- rr2.innerHTML=pending("r2-3-a")+pending("r2-3-b")+pending("r2-2-a")+pending("r2-2-b");
- lsf.innerHTML=pending("sf-0-a")+pending("sf-0-b");
- rsf.innerHTML=pending("sf-1-a")+pending("sf-1-b");
+ lr2.innerHTML=`<div class="match">${pending("r2-0-a")}${pending("r2-0-b")}</div><div class="match">${pending("r2-1-a")}${pending("r2-1-b")}</div>`;
+ rr2.innerHTML=`<div class="match">${pending("r2-3-b")}${pending("r2-3-a")}</div><div class="match">${pending("r2-2-b")}${pending("r2-2-a")}</div>`;
+ lsf.innerHTML=`<div class="match">${pending("sf-0-a")}${pending("sf-0-b")}</div>`;
+ rsf.innerHTML=`<div class="match">${pending("sf-1-b")}${pending("sf-1-a")}</div>`;
 }
 function fill(id,n){const e=document.getElementById(id);e.className="pill";e.innerHTML=baseName(n)}
 function decorate(id,n,v,total,win){
