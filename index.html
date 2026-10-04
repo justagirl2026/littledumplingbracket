@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Little Dumpling's Ultimate Name Bracket</title>
+<style>
+:root{--ink:#302821;--paper:#fbf5ec;--card:#fffdf9;--line:#d9cabb;--accent:#b97862;--accent2:#ead8ce}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+header{text-align:center;padding:34px 18px 22px}
+.kicker{font-family:Arial,sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px}
+h1{margin:0;font-size:clamp(30px,5vw,52px);line-height:1.05}
+.subtitle{font-family:Arial,sans-serif;margin:12px auto 0;max-width:650px;font-size:14px}
+.bracket-wrap{overflow-x:auto;padding:10px 18px 32px}
+.bracket{min-width:1180px;max-width:1450px;margin:auto;display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;gap:30px}
+.round{min-width:0}
+.round-title{text-align:center;font-family:Arial,sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;margin:0 0 15px}
+.games{height:720px;display:flex;flex-direction:column;justify-content:space-around}
+.game{display:flex;flex-direction:column;gap:5px}
+.slot{min-height:43px;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);display:flex;align-items:center;gap:8px;cursor:pointer;transition:transform .12s,border-color .12s,background .12s,box-shadow .12s;font-family:Arial,sans-serif}
+.slot:hover:not(.empty){transform:translateY(-1px);border-color:var(--accent)}
+.slot.selected{background:var(--accent2);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.slot.empty{opacity:.55;cursor:default}
+.seed{font-size:10px;color:#8b7d71;min-width:18px}
+.name{font-size:14px;font-weight:700;flex:1}
+.check{font-size:13px;color:var(--accent);font-weight:700}
+.final .slot{min-height:50px}
+.final .games{height:720px}
+.champion{border-color:#a66b48!important;background:#f4e4d7!important}
+.note{max-width:650px;margin:0 auto 18px;text-align:center;font-family:Arial,sans-serif;font-size:12px;color:#6e6259}
+.form{max-width:520px;margin:0 auto 44px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.form h2{margin:0 0 8px;font-size:25px}
+.form p{font-family:Arial,sans-serif;font-size:13px;line-height:1.5;margin:0 0 18px}
+label{display:block;font-family:Arial,sans-serif;font-size:12px;font-weight:700;margin:12px 0 6px}
+input{width:100%;padding:12px;border:1px solid var(--line);border-radius:7px;font-size:16px}
+button{width:100%;margin-top:16px;padding:13px;border:0;border-radius:8px;background:var(--ink);color:white;font-family:Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{font-family:Arial,sans-serif;text-align:center;font-size:13px;margin-top:12px}
+@media(max-width:700px){header{padding-top:24px}.bracket-wrap{padding-left:10px;padding-right:10px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Welcome to</div>
+  <h1>The Little Dumpling's<br>Ultimate Name Bracket</h1>
+  <p class="subtitle">16 names. One champion. Pick the name you think will make it all the way.</p>
+</header>
+
+<div class="note">Click one name in every matchup. Your pick will advance into the next round automatically.</div>
+
+<div class="bracket-wrap">
+  <main class="bracket" aria-label="Baby name tournament bracket">
+    <section class="round"><div class="round-title">Round 1</div><div class="games" id="r1"></div></section>
+    <section class="round"><div class="round-title">Round 2</div><div class="games" id="r2"></div></section>
+    <section class="round"><div class="round-title">Semifinals</div><div class="games" id="r3"></div></section>
+    <section class="round final"><div class="round-title">Final</div><div class="games" id="r4"></div></section>
+  </main>
+</div>
+
+<section class="form">
+  <h2>Ready to lock it in?</h2>
+  <p>Complete every matchup above, then enter your name. Submission is disabled until your bracket is complete.</p>
+  <label for="player">Your name</label>
+  <input id="player" autocomplete="name" placeholder="Enter your name">
+  <button id="submit" disabled>Submit My Bracket</button>
+  <div class="status" id="status" role="status"></div>
+</section>
+
+<script>
+const initial=[
+  [{seed:1,name:"Avery"},{seed:16,name:"Stump"}],
+  [{seed:8,name:"Augusta"},{seed:9,name:"Bailey"}],
+  [{seed:5,name:"Hieu"},{seed:12,name:"Callahan"}],
+  [{seed:4,name:"Liam"},{seed:13,name:"Arlo"}],
+  [{seed:6,name:"Logan"},{seed:11,name:"Caleb"}],
+  [{seed:3,name:"Rhys"},{seed:14,name:"Jared Jr."}],
+  [{seed:7,name:"Aiden"},{seed:10,name:"Lucas"}],
+  [{seed:2,name:"Val"},{seed:15,name:"Hannala"}]
+];
+
+let rounds=[
+  initial.map(g=>g.map(x=>({...x}))),
+  Array.from({length:4},()=>[null,null]),
+  Array.from({length:2},()=>[null,null]),
+  Array.from({length:1},()=>[null,null])
+];
+let picks=Array.from({length:4},()=>[]);
+
+function selectedName(r,g){
+  const i=picks[r][g];
+  return i===0||i===1 ? rounds[r][g][i] : null;
+}
+function resetFrom(r){
+  for(let x=r;x<4;x++){
+    picks[x]=[];
+    if(x>0) rounds[x]=Array.from({length:4/Math.pow(2,x)},()=>[null,null]);
+  }
+  // Rebuild later-round slots from the picks that still exist.
+  for(let x=r;x<4;x++){
+    if(x===0) continue;
+    const source=rounds[x-1];
+    const out=rounds[x];
+    out.forEach((g,gi)=>{
+      const leftPick=picks[x-1][gi*2];
+      const rightPick=picks[x-1][gi*2+1];
+      g[0]=leftPick===0||leftPick===1 ? {...source[gi*2][leftPick]} : null;
+      g[1]=rightPick===0||rightPick===1 ? {...source[gi*2+1][rightPick]} : null;
+    });
+  }
+}
+function choose(r,g,slot){
+  if(!rounds[r][g][slot]) return;
+  picks[r][g]=slot;
+  // Clear everything after this round and rebuild from the selections
+  for(let x=r+1;x<4;x++){picks[x]=[];}
+  for(let x=r+1;x<4;x++){
+    const source=rounds[x-1];
+    const out=rounds[x];
+    out.forEach((match,gi)=>{
+      const a=picks[x-1][gi*2], b=picks[x-1][gi*2+1];
+      match[0]=(a===0||a===1)?{...source[gi*2][a]}:null;
+      match[1]=(b===0||b===1)?{...source[gi*2+1][b]}:null;
+    });
+  }
+  render();
+}
+function renderRound(r){
+  const el=document.getElementById("r"+(r+1)); el.innerHTML="";
+  rounds[r].forEach((match,g)=>{
+    const game=document.createElement("div");game.className="game";
+    match.forEach((item,s)=>{
+      const slot=document.createElement("div");
+      const chosen=picks[r][g]===s;
+      slot.className="slot"+(item?"":" empty")+(chosen?" selected":"")+(r===3&&chosen?" champion":"");
+      if(item){
+        slot.innerHTML='<span class="seed">'+(item.seed??"")+'</span><span class="name">'+item.name+'</span><span class="check">'+(chosen?"✓":"")+'</span>';
+        slot.onclick=()=>choose(r,g,s);
+        slot.setAttribute("role","button");
+        slot.setAttribute("aria-label","Choose "+item.name);
+      }else{
+        slot.innerHTML='<span class="name">Waiting for your picks</span>';
+      }
+      game.appendChild(slot);
+    });
+    el.appendChild(game);
+  });
+}
+function isComplete(){
+  return rounds.every((arr,r)=>picks[r].length===arr.length && picks[r].every(v=>v===0||v===1));
+}
+function render(){
+  for(let r=0;r<4;r++)renderRound(r);
+  document.getElementById("submit").disabled=!isComplete();
+}
+document.getElementById("submit").onclick=()=>{
+  const name=document.getElementById("player").value.trim();
+  if(!name){document.getElementById("status").textContent="Please enter your name.";return;}
+  const chosen=rounds.map((arr,r)=>arr.map((g,i)=>g[picks[r][i]].name));
+  console.log({name,round1:chosen[0],round2:chosen[1],semifinals:chosen[2],final:chosen[3]});
+  document.getElementById("status").textContent="Your bracket is complete and ready to submit. We'll connect this button to your Google Sheet next.";
+};
+render();
+</script>
+</body>
+</html>
