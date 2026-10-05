@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@ header{text-align:center;padding:24px 12px 2px;color:var(--brown)}header small{l
 .pill.pending{color:var(--muted);border-color:#c7bbb2;font-weight:400;letter-spacing:.12em}.pill.winner{background:var(--soft);border-color:var(--brown);box-shadow:0 5px 17px #4f39251b}.pill.loser{opacity:.38}.seed{font-size:10px;color:#78685e;margin-right:5px}
 .vote{display:block;font:10px Arial,sans-serif;font-weight:400;color:#6f6259;margin-top:4px;letter-spacing:0}.pill.loser .vote{text-decoration:none}
 .champ{border:2px solid var(--brown);border-radius:32px;padding:28px 14px;text-align:center;background:var(--white);box-shadow:0 10px 28px #50372814}
-.champ small{letter-spacing:.15em;color:var(--brown);font-weight:700}.champ-name{font-size:31px;font-weight:700;color:var(--brown);margin-top:12px;min-height:38px}
+.champ small{letter-spacing:.15em;color:var(--brown);font-weight:700}.champ-name{font-size:31px;font-weight:700;color:var(--brown);margin-top:12px;min-height:38px}.final-matchup{margin-top:16px;font-family:Arial,sans-serif}.final-row{border:1.5px solid var(--line);border-radius:22px;padding:9px 8px;margin:7px 0;font-size:13px;font-weight:700}.final-row.winner{background:var(--soft);border-color:var(--brown)}.final-votes{display:block;margin-top:4px;font-size:10px;font-weight:400;color:#6f6259}.final-vs{font:700 10px Arial,sans-serif;color:#8b6a5b}
 .controls{text-align:center;max-width:680px;margin:0 auto 38px;padding:0 15px;font-family:Arial,sans-serif}
 #status{font-size:12px;color:#786b62;margin:8px 0}.error{color:#9a3c32!important}
 button{border:0;border-radius:30px;padding:14px 25px;margin:5px;background:var(--brown);color:#fff;font-weight:700;font-size:14px;cursor:pointer}.secondary{background:#e5d8cf;color:var(--ink)}button:disabled{opacity:.4;cursor:not-allowed}
@@ -26,7 +27,7 @@ button{border:0;border-radius:30px;padding:14px 25px;margin:5px;background:var(-
 <header><small>THE LITTLE DUMPLING'S</small><h1><span class="dumpling">🥟</span> NAME BRACKET <span class="dumpling">🥟</span></h1><div class="subtitle">The Official Results Reveal</div></header>
 <div class="stage"><div class="bracket">
 <div class="col" id="lr1"></div><div class="col r2" id="lr2"></div><div class="col sf" id="lsf"></div>
-<div class="col center"><div class="champ"><div id="mascot" style="font-size:28px">🥟</div><small>THE LITTLE DUMPLING'S<br>ULTIMATE NAME</small><div class="champ-name" id="champ">?????</div></div></div>
+<div class="col center"><div class="champ"><div id="mascot" style="font-size:28px">🥟</div><small>THE LITTLE DUMPLING'S<br>ULTIMATE NAME</small><div class="final-matchup"><div class="final-row" id="finalRowA"><span id="finalA">?????</span><span class="final-votes" id="finalAVotes">votes hidden</span></div><div class="final-vs">VS</div><div class="final-row" id="finalRowB"><span id="finalB">?????</span><span class="final-votes" id="finalBVotes">votes hidden</span></div></div><div class="champ-name" id="champ">?????</div></div></div>
 <div class="col sf" id="rsf"></div><div class="col r2" id="rr2"></div><div class="col" id="rr1"></div>
 </div></div>
 <div class="controls"><div class="round-banner" id="banner">ROUND 1</div><div id="status">Loading the official tally…</div><button id="next" disabled>Reveal Matchup 1</button><button class="secondary" id="reset">Reset Reveal</button></div>
@@ -88,11 +89,19 @@ function revealR2(i){
 function revealSF(i){
  const r=data[12+i],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
  decorate(`sf-${i}-a`,a,av,total,w===a);decorate(`sf-${i}-b`,b,bv,total,w===b);
+ if(i===0) document.getElementById("finalA").textContent=w;
+ if(i===1) document.getElementById("finalB").textContent=w;
 }
 function revealFinal(){
  const r=data[14],a=r.name1,b=r.name2,av=Number(r.votes1)||0,bv=Number(r.votes2)||0,w=r.winner,total=av+bv;
+ document.getElementById("finalA").textContent=a;
+ document.getElementById("finalB").textContent=b;
+ document.getElementById("finalAVotes").textContent=`${av} vote${av===1?"":"s"} · ${total?((av/total)*100).toFixed(1):"0.0"}%`;
+ document.getElementById("finalBVotes").textContent=`${bv} vote${bv===1?"":"s"} · ${total?((bv/total)*100).toFixed(1):"0.0"}%`;
+ document.getElementById("finalRowA").classList.toggle("winner",w===a);
+ document.getElementById("finalRowB").classList.toggle("winner",w===b);
  champ.innerHTML=`🎉 ${w} 🏆`;mascot.textContent="🎉 🥟 🏆 🥟 🎉";
- status.innerHTML=`<b>${a}</b>: ${av} votes · ${total?((av/total)*100).toFixed(1):"0.0"}% &nbsp; • &nbsp; <b>${b}</b>: ${bv} votes · ${total?((bv/total)*100).toFixed(1):"0.0"}%`;
+ status.innerHTML=`<b>${total}</b> brackets picked one of these two finalists as their Ultimate Pick.`;
 }
 function reveal(){
  if(step>=7)return;
